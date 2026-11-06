@@ -142,15 +142,16 @@ var cv=film.querySelector('.bi-film-bg'),cx=cv.getContext('2d');
 var small=window.innerWidth<=980,SHARP=small?'olya-walk-m.mp4':'olya-walk.mp4';
 b.src=SHARP;
 function play(v){var p=v.play();if(p&&p.catch)p.catch(function(){});}
-function show(v){v.classList.add('on');cur=v;}
-a.addEventListener('playing',function(){if(!b.classList.contains('on'))show(a);if(b.preload==='none'){b.preload='auto';b.load();}});
+function show(v){v.style.zIndex=2;(v===a?b:a).style.zIndex=1;v.classList.add('on');cur=v;}
+var poster=fg.querySelector('.bi-film-poster');
+a.addEventListener('playing',function(){if(!b.classList.contains('on'))show(a);setTimeout(function(){poster.style.display='none';},600);if(b.preload==='none'){b.preload='auto';b.load();}});
 b.addEventListener('playing',function(){if(cur!==b&&!a.classList.contains('on'))show(b);});
 play(a);
 function start(v){v.currentTime=0;play(v);show(v);}
 /* two players crossfade so the loop has no visible jump */
 function watch(x,y){
 x.addEventListener('timeupdate',function(){
-if(x.duration&&x.currentTime>x.duration-FADE&&!y.classList.contains('on')){if(y.readyState<3){if(x.currentTime>x.duration-.08)x.currentTime=0;return;}start(y);x.classList.remove('on');if(x.currentSrc.indexOf('fast')>-1)setTimeout(function(){x.src=SHARP;x.load();},1000);}
+if(x.duration&&x.currentTime>x.duration-FADE&&!y.classList.contains('on')){if(y.readyState<3){if(x.currentTime>x.duration-.08)x.currentTime=0;return;}start(y);setTimeout(function(){x.classList.remove('on');x.pause();if(x.currentSrc.indexOf('fast')>-1){x.src=SHARP;x.load();}},600);}
 });
 }
 watch(a,b);watch(b,a);
