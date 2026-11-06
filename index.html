@@ -142,7 +142,14 @@ var cv=film.querySelector('.bi-film-bg'),cx=cv.getContext('2d');
 function play(v){var p=v.play();if(p&&p.catch)p.catch(function(){});}
 function show(v){v.style.zIndex=2;(v===a?b:a).style.zIndex=1;v.classList.add('on');cur=v;}
 var poster=fg.querySelector('.bi-film-poster');
-a.addEventListener('playing',function(){if(!b.classList.contains('on'))show(a);setTimeout(function(){poster.style.display='none';},600);if(b.preload==='none'){b.src=a.currentSrc;b.preload='auto';b.load();}});
+var started=false;
+function live(){if(started)return;started=true;if(!b.classList.contains('on'))show(a);setTimeout(function(){poster.style.display='none';},600);if(b.preload==='none'){b.src=a.currentSrc;b.preload='auto';b.load();}}
+a.addEventListener('playing',live);a.addEventListener('timeupdate',live);
+/* the clip may already be running before this script is reached */
+if(!a.paused&&a.readyState>2)live();
+function kick(){if(!started)play(a);}
+['touchstart','scroll','click'].forEach(function(e){addEventListener(e,kick,{passive:true,once:true});});
+setTimeout(function(){if(!started&&a.currentSrc.indexOf('hevc')>-1){a.src='olya-walk-m.mp4';a.load();play(a);}},3000);
 b.addEventListener('playing',function(){if(cur!==b&&!a.classList.contains('on'))show(b);});
 play(a);
 function start(v){v.currentTime=0;play(v);show(v);}
