@@ -1240,4 +1240,58 @@ addEventListener('load',function(){size();draw();});
 size();draw();
 })();
 </script>
+<style>
+.nv{position:fixed;left:0;right:0;top:0;z-index:9985;padding-top:4px;background:rgba(255,246,248,.86);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:0 8px 28px rgba(185,71,111,.12);font-family:'Manrope',Arial,sans-serif;color:#3A2530;transform:translateY(-110%);transition:transform .4s cubic-bezier(.2,.7,.2,1)}
+.nv.on{transform:none}
+.nv-in{display:flex;align-items:center;justify-content:space-between;gap:20px;max-width:1200px;margin:0 auto;padding:9px 24px}
+.nv-logo{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:24px;color:#B9476F;text-decoration:none}
+.nv-links{display:flex;align-items:center;gap:26px}
+.nv-links a{font-size:14px;font-weight:500;color:#3A2530;text-decoration:none;transition:color .2s}
+.nv-links a:hover{color:#B9476F}
+.nv-links a.nv-btn{padding:9px 18px;border-radius:99px;background:linear-gradient(135deg,#E27A9B,#B9476F);color:#fff;font-weight:700}
+.nv-burger{display:none;width:42px;height:42px;border:0;border-radius:50%;background:#fff;box-shadow:0 4px 14px rgba(185,71,111,.16);cursor:pointer;position:relative}
+.nv-burger i{position:absolute;left:12px;right:12px;height:2px;border-radius:2px;background:#B9476F;transition:transform .25s,opacity .2s,top .25s}
+.nv-burger i:nth-child(1){top:14px}
+.nv-burger i:nth-child(2){top:20px}
+.nv-burger i:nth-child(3){top:26px}
+.nv.open .nv-burger i:nth-child(1){top:20px;transform:rotate(45deg)}
+.nv.open .nv-burger i:nth-child(2){opacity:0}
+.nv.open .nv-burger i:nth-child(3){top:20px;transform:rotate(-45deg)}
+.bx-dayl{top:66px}
+[id="program"],[id="results"],[id="prices"],[id="faq"]{scroll-margin-top:62px}
+@media (max-width:860px){
+.nv-in{padding:7px 16px}
+.nv-burger{display:block}
+.nv-links{display:none;position:absolute;left:0;right:0;top:100%;flex-direction:column;align-items:stretch;gap:0;padding:6px 16px 16px;background:rgba(255,246,248,.97);box-shadow:0 18px 30px rgba(185,71,111,.14)}
+.nv.open .nv-links{display:flex}
+.nv-links a{padding:13px 2px;font-size:16px;border-bottom:1px solid rgba(185,71,111,.12)}
+.nv-links a.nv-btn{margin-top:12px;padding:14px;text-align:center;border:0}
+}
+</style>
+<header class="nv" id="nv"><div class="nv-in"><a class="nv-logo" href="#top">blog start</a>
+<nav class="nv-links" aria-label="Меню"><a href="#program">Программа</a><a href="#author" data-go="author">Об авторе</a><a href="#results">Результат</a><a href="#prices">Тарифы</a><a href="#faq">Вопросы</a><a class="nv-btn" href="#prices">Записаться</a></nav>
+<button class="nv-burger" type="button" aria-label="Меню" aria-expanded="false"><i></i><i></i><i></i></button></div></header>
+<script>
+(function(){
+var nv=document.getElementById('nv'),hero=document.querySelector('.bi-hero'),burger=nv.querySelector('.nv-burger'),bl=document.querySelector('.bl');
+function close(){nv.classList.remove('open');burger.setAttribute('aria-expanded','false');}
+function on(){
+var show=hero.getBoundingClientRect().bottom<64;
+nv.classList.toggle('on',show);
+if(!show) close();
+}
+addEventListener('scroll',on,{passive:true});addEventListener('resize',on);on();
+burger.addEventListener('click',function(){var o=nv.classList.toggle('open');burger.setAttribute('aria-expanded',o);});
+nv.addEventListener('click',function(e){
+var a=e.target.closest&&e.target.closest('a');if(!a) return;
+close();
+if(a.getAttribute('href')==='#top'){e.preventDefault();scrollTo({top:0});}
+else if(a.dataset.go==='author'&&bl){
+e.preventDefault();
+var r=bl.getBoundingClientRect();
+scrollTo({top:r.top+scrollY+(r.height-innerHeight)*.82});
+}
+});
+})();
+</script>
 </body></html>
